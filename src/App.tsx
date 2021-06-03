@@ -1,10 +1,12 @@
 import "./styles.css";
-import LineChart from "./visx/LineChart";
+import VisxLineChart from "./visx/LineChart";
+import D3LineChart from "./d3/LineChart";
 
 export default function App() {
   return (
     <div className="App">
-      <LineChart />
+      <VisxLineChart />
+      <D3LineChart />
     </div>
   );
 }
