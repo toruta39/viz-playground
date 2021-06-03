@@ -38,24 +38,22 @@ export default function LineChart() {
         .attr("transform", "rotate(90)")
         .attr("text-anchor", "start");
 
-    const yAxis = (g) => g.call(d3.axisLeft(y));
+    const yAxis = (g) => g.call(d3.axisLeft(y).tickFormat(d3.format(".2s")));
 
     // render with data
     x.domain(
       d3.extent(fundData, (d) => new Date(`${d.x}T00:00:00`)) as [Date, Date]
     );
-    y.domain(d3.extent(fundData, (d) => d.y) as [number, number]);
+    y.domain([0, d3.max(fundData, (d) => d.y)] as [number, number]);
 
     svg.select(".x-axis").call(xAxis);
     svg.select(".y-axis").call(yAxis);
 
     svg
-      .select(".plot-area")
-      .selectAll(".plot")
-      .data([fundData, goalData])
+      .selectAll(".plot-area path")
+      .data([fundData, goalData], (d) => d)
       .join("path")
-      .attr("class", "plot")
-      .attr("stroke", "steelblue")
+      .attr("stroke", (d, i) => ["steelblue", "orange"][i])
       .attr("stroke-width", 1.5)
       .attr("fill", "none")
       .attr(

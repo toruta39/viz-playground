@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { format } from "date-fns";
 import { Axis, Grid, LineSeries, Tooltip, XYChart } from "@visx/xychart";
+import * as d3 from "d3";
 import { fundData, goalData, years, Datum } from "../data";
 
 const ChartContainer = styled.div`
@@ -68,40 +69,28 @@ export default function LineChart() {
       >
         <Grid
           columns={false}
-          numTicks={4} // how is this acting
           lineStyle={{
             stroke: "#e1e1e1",
             strokeLinecap: "round",
             strokeWidth: 1
           }}
-          strokeDasharray="0, 4" // dashed line grid?
+          strokeDasharray="4"
         />
-        {/* is this the x axis?  */}
+        <Axis orientation="bottom" tickLabelProps={() => ({ dy: 0 })} />
         <Axis
-          hideAxisLine
-          hideTicks
-          orientation="bottom"
-          tickLabelProps={() => ({ dy: 0 })}
-          numTicks={years}
-        />
-        {/* is this the y axis?  */}
-        <Axis
-          hideAxisLine
-          hideTicks
           orientation="left"
-          numTicks={10}
           tickLabelProps={() => ({ dx: -0 })}
+          tickFormat={d3.format(".2s")}
         />
-        {/* this seems to be the plot */}
         <LineSeries
-          stroke="#008561"
-          dataKey="fund_accumulation"
+          stroke="steelblue"
+          dataKey="fund"
           data={fundData}
           {...accessors}
         />
         <LineSeries
-          stroke="#006185"
-          dataKey="goal_with_inflation"
+          stroke="orange"
+          dataKey="goal"
           data={goalData}
           {...accessors}
         />
