@@ -1,11 +1,9 @@
-import { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import { fundData, goalData, Datum } from "../data";
+import { fundData, goalData } from "../data";
+import useD3 from "./useD3";
 
 export default function LineChart() {
-  const ref = useRef(null);
-
-  useEffect(() => {
+  const ref = useD3(() => {
     // viewport
     let margin = {
         top: 30,
@@ -43,8 +41,10 @@ export default function LineChart() {
     const yAxis = (g) => g.call(d3.axisLeft(y));
 
     // render with data
-    x.domain(d3.extent(fundData, (d: Datum) => new Date(`${d.x}T00:00:00`)));
-    y.domain(d3.extent(fundData, (d: Datum) => d.y));
+    x.domain(
+      d3.extent(fundData, (d) => new Date(`${d.x}T00:00:00`)) as [Date, Date]
+    );
+    y.domain(d3.extent(fundData, (d) => d.y) as [number, number]);
 
     svg.select(".x-axis").call(xAxis);
     svg.select(".y-axis").call(yAxis);
@@ -65,7 +65,7 @@ export default function LineChart() {
           .x((d) => x(new Date(`${d.x}T00:00:00`)))
           .y((d) => y(d.y))
       );
-  }, []);
+  }, [fundData, goalData]);
 
   return (
     <svg ref={ref}>
